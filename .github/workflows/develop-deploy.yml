@@ -50,7 +50,7 @@ jobs:
 
       # cloudfront 무효화
       - name: Invalidate cache for CloudFront
-        run: aws cloudfront create-invalidation --distribution-id E37PVT71J4J2D9 --paths "/*"
+        run: aws cloudfront create-invalidation --distribution-id EFKFMOWL49NJ2 --paths "/*"
 
       # Discord 에 메시지 전송
       - name: Sending Discord message...
