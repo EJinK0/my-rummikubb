@@ -40,8 +40,7 @@ jobs:
           REACT_APP_AWS_SSM_REGION: ${{ secrets.AWS_REGION }}
         run: |
           CI=false
-          npm ci 
-          npm run config
+          npm ci
           npm run build
 
       # AWS S3에 빌드 결과 업로드
