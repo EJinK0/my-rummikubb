@@ -16,7 +16,7 @@
     "babel-plugin-named-exports-order": "^0.0.2"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "start": "react-scripts start --reset-cache",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
