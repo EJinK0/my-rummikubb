@@ -1,61 +1,61 @@
-name: WEPIN WEB DEVELOPMENT DEPLOY
+name: RUMMIKUBB WEB DEVELOPMENT DEPLOY
 
 # Controls when the workflow will run
 on:
-    push:
-        branches: [develop] #push 반응을 할 브런치
+  push:
+    branches: [develop] #push 반응을 할 브런치
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-    # This workflow contains a single job called "build"
-    build_wepin_dev:
-        # The type of runner that the job will run on
-        runs-on: ubuntu-latest
-        # Steps represent a sequence of tasks that will be executed as part of the job
-        steps:
-            # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-            - uses: actions/checkout@v3
+  # This workflow contains a single job called "build"
+  build_my_rummikubb:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v3
 
-            # node 버전 통일해야 할 경우 이와 같이 노드 버전 지정.
-            - uses: actions/setup-node@v3
-              with:
-                  node-version: 16.17.0
-                  cache: npm
+      # node 버전 통일해야 할 경우 이와 같이 노드 버전 지정.
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16.17.0
+          cache: npm
 
-            # aws credentials 생성
-            - name: Configure AWS Credentials
-              uses: aws-actions/configure-aws-credentials@v1
-              with:
-                  aws-access-key-id: ${{ secrets.AWS_DEV_ACCESS_KEY }}
-                  aws-secret-access-key: ${{ secrets.AWS_DEV_SECRET_ACCESS_KEY }}
-                  aws-region: ${{ secrets.AWS_REGION }}
+      # aws credentials 생성
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_DEV_ACCESS_KEY }}
+          aws-secret-access-key: ${{ secrets.AWS_DEV_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
 
-            # npm 패키지 설치 & 리액트 빌드
-            - name: install npm dependencies & build react
-              env:
-                  AWS_ENV: dev
-                  CI: false
-                  REACT_APP_AWS_SSM_ACCESS_KEY: ${{ secrets.AWS_DEV_ACCESS_KEY }}
-                  REACT_APP_AWS_SSM_SECRET_KEY: ${{ secrets.AWS_DEV_SECRET_ACCESS_KEY }}
-                  REACT_APP_AWS_SSM_REGION: ${{ secrets.AWS_REGION }}
-              run: |
-                  CI=false
-                  npm ci 
-                  npm run config
-                  npm run build
+      # npm 패키지 설치 & 리액트 빌드
+      - name: install npm dependencies & build react
+        env:
+          AWS_ENV: dev
+          CI: false
+          REACT_APP_AWS_SSM_ACCESS_KEY: ${{ secrets.AWS_DEV_ACCESS_KEY }}
+          REACT_APP_AWS_SSM_SECRET_KEY: ${{ secrets.AWS_DEV_SECRET_ACCESS_KEY }}
+          REACT_APP_AWS_SSM_REGION: ${{ secrets.AWS_REGION }}
+        run: |
+          CI=false
+          npm ci 
+          npm run config
+          npm run build
 
-            # AWS S3에 빌드 결과 업로드
-            - name: Deploying to S3 BUCKET
-              run: aws s3 sync ./build/ s3://${{ secrets.S3_DEV_REPO }} --delete
+      # AWS S3에 빌드 결과 업로드
+      - name: Deploying to S3 BUCKET
+        run: aws s3 sync ./build/ s3://${{ secrets.S3_DEV_REPO }} --delete
 
-            # cloudfront 무효화
-            - name: Invalidate cache for CloudFront
-              run: aws cloudfront create-invalidation --distribution-id E37PVT71J4J2D9 --paths "/*"
+      # cloudfront 무효화
+      - name: Invalidate cache for CloudFront
+        run: aws cloudfront create-invalidation --distribution-id E37PVT71J4J2D9 --paths "/*"
 
-            # Discord 에 메시지 전송
-            - name: Sending Discord message...
-              uses: nebularg/actions-discord-webhook@v1
-              with:
-                  webhook_url: ${{ secrets.DISCORD_WEBHOOK_URL }} # required
-                  status: ${{ job.status }} # optional, this is the default
-              if: always() # or failure() or success()
+      # Discord 에 메시지 전송
+      - name: Sending Discord message...
+        uses: nebularg/actions-discord-webhook@v1
+        with:
+          webhook_url: ${{ secrets.DISCORD_WEBHOOK_URL }} # required
+          status: ${{ job.status }} # optional, this is the default
+        if: always() # or failure() or success()
