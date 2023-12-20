@@ -10,15 +10,20 @@
     "react-dom": "^18.2.0",
     "react-scripts": "5.0.1",
     "web-vitals": "^2.1.4",
-    "axios": "^1.4.0"
+    "axios": "^1.4.0",
+    "env-cmd": "^10.1.0",
+    "aws-param-store": "^3.2.0",
+    "dotenv": "^16.3.1"
   },
   "devDependencies":{
     "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
     "babel-plugin-named-exports-order": "^0.0.2"
   },
   "scripts": {
-    "start": "react-scripts start --reset-cache",
+    "start": "react-scripts config:local && react-scripts start --reset-cache",
     "build": "react-scripts build",
+    "config": "node environment-generate.js",
+    "config:local": "env-cmd -f .env.generate node environment-generate.js",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
