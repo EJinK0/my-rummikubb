@@ -41,6 +41,7 @@ jobs:
         run: |
           CI=false
           npm ci
+          npm run config
           npm run build
 
       # AWS S3에 빌드 결과 업로드
