@@ -13,6 +13,7 @@ function App() {
         email: 'kim@bb.bb'
       };
 
+      console.log('react url?', process.env.REACT_APP_API_URL);
     axioswrapper('POST', `${process.env.REACT_APP_API_URL}/users`, payload)
     .then((response) => {
         console.log('call success', response);
