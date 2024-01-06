@@ -1,5 +1,5 @@
 # go to page
-https://dev.ellie-world.store \
+https://ellie-world.store
 아직 개발중입니다...
 
 # Getting Started with Create React App
